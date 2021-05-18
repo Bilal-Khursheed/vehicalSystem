@@ -1,0 +1,45 @@
+.card_wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.card_margin{
+    padding-left: 1%;
+    padding-right: 1%;
+    flex-basis: 12%;
+}
+.full_card{
+    padding: 0.5rem;
+    background: rgb(0, 0, 51);
+    padding: 4px;
+    margin-bottom: 14px;
+    border-radius: 5px;
+}
+.heading{
+    color: red;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+.item{
+    padding: 0.5rem;
+    background: white;
+    color: black;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+@media only screen and (max-width: 1000px) {
+    .card_margin{
+        flex-basis: 14.5%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .card_margin{
+        flex-basis: 22%;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .card_margin{
+        flex-basis: 46%;
+    }
+}
