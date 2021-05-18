@@ -22,7 +22,7 @@ export class MapContainer extends Component {
     };
   }
   async componentDidMount() {
-    var groupId = 2,
+    var groupId = this.props.groupId || 2,
     valueArry = [];
     let data = await axios.get(
       `http://localhost:4000/api/map?assignType=${groupId}`
@@ -70,7 +70,7 @@ export class MapContainer extends Component {
       <div>
         <Map
           google={this.props.google}
-          zoom={8}
+          zoom={14}
           style={mapStyles}//-19.8098866
           initialCenter={{lat: 34.8344816, lng: -19.8098866 }}
         >

@@ -34,36 +34,37 @@ router.post('/add', async function (req, res, next) {
 /* get Object data. */
 router.get('/get', async function (req, res, next) {
   try {
-    let unAssigned = await objectModel.find({
-      assignType: 0
-    })
-    let QC1 = await objectModel.find({
-      assignType: 1
-    })
-    let QC2 = await objectModel.find({
-      assignType: 2
-    })
-    let QC3 = await objectModel.find({
-      assignType: 3
-    })
-    let QC4 = await objectModel.find({
-      assignType: 4
-    })
-    let landSide = await objectModel.find({
-      assignType: 5
-    })
-    let houseKeeping = await objectModel.find({
-      assignType: 6
-    })
-    let Rail = await objectModel.find({
-      assignType: 7
-    })
-
+    let allData = await objectModel.find({}).lean();
+    let unAssigned = allData.filter((item) => {
+      return item.assignType === 0
+    });
+    let QC1 = allData.filter((item) => {
+      return item.assignType === 1
+    });
+    let QC2 = allData.filter((item) => {
+      return item.assignType === 2
+    });
+    let QC3 = allData.filter((item) => {
+      return item.assignType === 3
+    });
+    let QC4 = allData.filter((item) => {
+      return item.assignType === 4
+    });
+    let landSide = allData.filter((item) => {
+      return item.assignType === 5
+    });
+    let houseKeeping = allData.filter((item) => {
+      return item.assignType === 6
+    });
+    let Rail = allData.filter((item) => {
+      return item.assignType === 7
+    });
+ 
     return res.json({
       status: 0,
       message: "Object data is fetched Successfully.",
       data: {
-        unAssigned: unAssigned,
+        unAssigned,
         QC1,
         QC2,
         QC3,
@@ -92,7 +93,7 @@ router.put('/', async function (req, res, next) {
       assignType: assignType
     })
     console.log(unAssigned)
-    if(unAssigned){
+    if (unAssigned) {
       console.log("updated")
     }
     return res.json({
@@ -114,10 +115,12 @@ router.get('/detials', async function (req, res, next) {
     let assignType = req.query.assignType || null;
     let id_filters = await objectModel.find({
       assignType: assignType
-    }).select('id');
-    let id_filter = [];
-    console.log("working....")
+    }).select(['id','objectName']);
+    let id_filter=[],objectName =[],indexs=-1;
+    console.log("working...." ,id_filters)
     id_filters.map((item) => {
+      objectName=[...objectName, item.objectName]
+      console.log("here is the id", item.id)
       id_filter = [...id_filter, `${item.id}`]
     })
     request({
@@ -128,8 +131,11 @@ router.get('/detials', async function (req, res, next) {
         var arrOfObj = [];
         Object.keys(body.statistics).map((item) => {
           if (id_filter.indexOf(item) !== -1) {
-            body.statistics[item].id= item;
-            arrOfObj = [...arrOfObj, 
+            body.statistics[item].id = item;
+            console.log("oobjectName[index]",objectName[indexs+1])
+            body.statistics[item].objectName = objectName[indexs+1]|| 0;
+            indexs++;
+            arrOfObj = [...arrOfObj,
               body.statistics[item]
             ]
           }
@@ -165,6 +171,7 @@ router.get('/map', async function (req, res, next) {
     // id_filters.map((item)=>{
     //   id_filter = [...id_filter, `${item.id}`]
     // })
+    let count = 1;
     id_filters.map((item, index) => {
       request({
         uri: `https://fleetapi.geeksapi.app/api/currentObjectState?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&objectId=${item.id}`,
@@ -173,14 +180,15 @@ router.get('/map', async function (req, res, next) {
           body = JSON.parse(body)
           mapArry = [...mapArry, body]
           console.log(body)
-          console.log("values" ,id_filters.length , index)
-          if (index === 0) {
+          console.log("values", id_filters.length, count)
+          if (count ===id_filters.length) {
             res.json({
               status: 1,
               message: "map data is fetched successfuly",
               data: mapArry
             })
           }
+          count ++
         }
       }) // end of request
     })

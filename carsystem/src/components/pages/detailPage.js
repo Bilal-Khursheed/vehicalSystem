@@ -4,13 +4,13 @@ import TableContect from "./detailTable";
 
 class detailPage extends Component {
   state = {
-    groupId: ""
+    groupId: 2
   };
   render() {
     return (
       <div>
         <div>
-        <MapContainer />
+        <MapContainer groupId= {this.state.groupId}/>
         </div>
         <hr></hr>
         <div>
@@ -27,7 +27,7 @@ class detailPage extends Component {
                 <option value="7">Rail</option>
               </select>
           </div><div>
-        <TableContect/>
+        <TableContect groupId= {this.state.groupId}/>
         </div>
       </div>
     );

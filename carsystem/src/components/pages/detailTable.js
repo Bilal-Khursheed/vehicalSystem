@@ -1,23 +1,29 @@
 import React, { Component } from "react";
 import axios from "axios";
+import LoadingOverlay from "react-loading-overlay";
 class tableContect extends Component {
-  state = {
-    tableData: []
+  constructor(props) {
+    super(props);
+  this.state = {
+    tableData: [],
+    loading: true
   };
+}
   async componentDidMount(){
     console.log("working.....")
-    let groupId = 2;
+    let groupId = this.props.groupId || 2;
     let data =  await axios.get(`http://localhost:4000/api/detials?assignType=${groupId}`);
     console.log(data.data.data.arrOfObj)
     this.setState({
-      tableData:data.data.data.arrOfObj
+      tableData:data.data.data.arrOfObj,
+      loading: false
     })
 
   }
   render() {
     return (
       <div style={{ marginTop: "28%" }}>
- 
+ <LoadingOverlay active={this.state.loading} spinner={true} text="Loading your content...">
         <hr></hr>
         <div class="container">
           <h2>Detial Table</h2>
@@ -27,6 +33,7 @@ class tableContect extends Component {
           <table class="table">
             <thead>
               <tr>
+                <th>NO</th>
                 <th>ID</th>
                 <th>Average Speed</th>
                 <th>Mileage (kms)</th>
@@ -34,28 +41,21 @@ class tableContect extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.tableData.map((item)=>(
+              {this.state.tableData.map((item, index)=>(
               <tr>
-                <td>{item.id}</td>
+                <td>{index+1}</td>
+                <td>{item.objectName}</td>
                 <td>{item.speedAverage}</td>
                 <td>{item.mileage}</td>
                 <td>{item.fuelConsumptionDeviationPer100km}</td>
                 
               </tr>
               ))}
-              {/* <tr>
-                <td>Mary</td>
-                <td>Moe</td>
-                <td>mary@example.com</td>
-              </tr>
-              <tr>
-                <td>July</td>
-                <td>Dooley</td>
-                <td>july@example.com</td>
-              </tr> */}
+              
             </tbody>
           </table>
         </div>
+        </LoadingOverlay>
       </div>
     );
   }
