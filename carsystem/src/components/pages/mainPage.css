@@ -7,19 +7,27 @@
 .card_margin{
     padding-left: 1%;
     padding-right: 1%;
-    flex-basis: 12%;
+    flex-basis: 16.5%;
 }
 .full_card{
     padding: 0.5rem;
-    background: rgb(0, 0, 51);
+    /* background: rgb(0, 0, 51); */
     padding: 4px;
     margin-bottom: 14px;
     border-radius: 5px;
 }
 .heading{
-    color: red;
+    color: rgb(223, 77, 9);
     margin-bottom: 6px;
     font-size: 14px;
+    padding-left: 1rem;
+    font-weight: bold;
+}
+.btn-outline-secondary{
+    border: 1px solid #343a40 ;
+}
+.btn-outline-secondary:hover{
+    color: #FFFFFF;
 }
 .item{
     padding: 0.5rem;
@@ -27,10 +35,11 @@
     color: black;
     border-radius: 4px;
     margin-bottom: 6px;
+    text-align: center;
 }
 @media only screen and (max-width: 1000px) {
     .card_margin{
-        flex-basis: 14.5%;
+        flex-basis: 16.5%;
     }
 }
 @media only screen and (max-width: 768px) {
