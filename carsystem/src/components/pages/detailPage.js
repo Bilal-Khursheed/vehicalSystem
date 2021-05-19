@@ -202,7 +202,7 @@ class detailPage extends Component {
               </option>
             </div>
           </div>
-          <div class="btn-group mt-2 mr-1">
+          {/* <div class="btn-group mt-2 mr-1">
             <input
               class="btn btn-secondary btn-lg"
               type="input"
@@ -262,7 +262,7 @@ class detailPage extends Component {
                 tsjdhvf
               </option>
             </div>
-          </div>
+          </div> */}
         </div>
         <div>
           <TableContect groupId={this.state.groupId} />
