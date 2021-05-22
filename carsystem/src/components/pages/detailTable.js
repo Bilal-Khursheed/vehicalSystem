@@ -20,10 +20,11 @@ class tableContect extends Component {
   updateTable = async () => {
     console.log("working.....");
     let groupId = this.props.groupId || 2;
+    let seconddata = await axios.get('https://sheetdb.io/api/v1/7i3xr5c1f4kma');
     let data = await axios.get(
       `http://localhost:4000/api/detials?assignType=${groupId}`
     );
-    console.log(data.data.data.arrOfObj);
+    console.log(seconddata.data);
     this.setState({
       tableData: data.data.data.arrOfObj,
       loading: false,
@@ -48,6 +49,9 @@ class tableContect extends Component {
                 <tr>
                   <th>NO</th>
                   <th>ID</th>
+                  <th>Receival</th>
+                  <th>Discharge</th>
+                  <th>Load</th>
                   <th>Average Speed</th>
                   <th>Mileage (kms)</th>
                   <th>Fuel Consumption</th>
@@ -58,6 +62,9 @@ class tableContect extends Component {
                   <tr>
                     <td>{index + 1}</td>
                     <td>{item.objectName}</td>
+                    <td>{item.Receival}</td>
+                    <td>{item.Discharge}</td>
+                    <td>{item.Load}</td>
                     <td>{item.speedAverage}</td>
                     <td>{item.mileage}</td>
                     <td>{item.fuelConsumptionDeviationPer100km}</td>

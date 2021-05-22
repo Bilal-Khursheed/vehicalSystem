@@ -90,6 +90,7 @@ function MainPage() {
                     }}
                   >
                     <option>Choose a Group</option>
+                    <option value="0">Unassigned</option>
                     <option value="1">QC1</option>
                     <option value="2">QC2</option>
                     <option value="3">QC3</option>
@@ -158,6 +159,18 @@ function MainPage() {
                       QC1.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}
@@ -173,6 +186,18 @@ function MainPage() {
                       QC2.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}
@@ -188,6 +213,18 @@ function MainPage() {
                       QC3.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}
@@ -203,6 +240,18 @@ function MainPage() {
                       QC4.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}
@@ -218,6 +267,18 @@ function MainPage() {
                       landSide.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}
@@ -233,6 +294,18 @@ function MainPage() {
                       houseKeeping.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}
@@ -248,6 +321,18 @@ function MainPage() {
                       Rail.map((item) => (
                         <div class="item">
                           {item.objectName}
+                          <br></br>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => {
+                                setcarId(item.id);
+                              }}
+                            >
+                              Assign
+                            </button>
                           {/* test data */}
                         </div>
                       ))}

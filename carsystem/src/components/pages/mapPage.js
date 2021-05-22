@@ -42,8 +42,8 @@ export class MapContainer extends Component {
     data.data.data.map((item) => {
       var str = String(item.lastGPS).split(";");
       let obj = {
-        longitude: parseFloat(str[0]),
-        latitude: parseFloat(str[1]), //latitude
+        latitude: parseFloat(str[0]),
+        longitude: parseFloat(str[1]), //latitude
         name: item.address,
       };
       return (valueArry = [...valueArry, obj]);
@@ -90,7 +90,7 @@ export class MapContainer extends Component {
           google={this.props.google}
           zoom={14}
           style={mapStyles} //-19.8098866
-          initialCenter={{ lat: 34.8344816, lng: -19.8098866 }}
+          initialCenter={{ lat: -19.8098866, lng: 34.8344816 }}
         >
           {this.displayMarkers()}
         </Map>
