@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const URI =
-  "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false";
+  "mongodb+srv://carSystem:DBpass@cluster0.r5zoy.mongodb.net/carsytem?retryWrites=true&w=majority";
 
 const connectDB = async () => {
   mongoose
