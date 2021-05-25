@@ -115,8 +115,8 @@ router.put('/', async function (req, res, next) {
 router.get('/detials', async function (req, res, next) {
     try {
         let assignType = req.query.assignType || null;
-        let startDate = req.query.startDate || '12-05-21 00:00';
-        let endDate = req.query.endDate || '12-05-21 01:00';
+        let startDate = req.query.startDate || '2021-05-10T01:32';
+        let endDate = req.query.endDate|| '2022-05-10T01:32';
         console.log('before conversion ' , startDate)
         var startDateCov = moment(startDate).format("DD-MM-YY HH:mm");
         var endDateCov = moment(endDate).format("DD-MM-YY HH:mm ");
@@ -128,8 +128,10 @@ router.get('/detials', async function (req, res, next) {
         let id_filter = [],
             objectName = [],
             indexs = -1,
+            timeFilter = [],
             filtered_obj = [];
         let objectCount = [];
+        var arrOfObj = [];
         id_filters.map((item) => {
             objectName = [...objectName, item.objectName]
             id_filter = [...id_filter, `${item.id}`]
@@ -19232,7 +19234,7 @@ router.get('/detials', async function (req, res, next) {
             let count = 0,
                 receivalCount = [],
                 dischargeCount = [],
-                timeFilter = [],
+               
                 loadCount = [];
 
             let rows = result['query-response']['data-table'][0]['rows'][0]
@@ -19241,18 +19243,18 @@ router.get('/detials', async function (req, res, next) {
                    
                     // return Date.parse(items.field[0]) >= Date.parse(startDateCov) && Date.parse(items.field[0]) <= Date.parse(endDateCov)
                     // return new Date(items.field[0]) >= new Date(startDateCov) && new Date(items.field[0]) <= new Date(endDateCov)
-                    return moment(items.field[0], "MM/DD/YYYY HH:mm").valueOf() >= moment(startDateCov, "MM/DD/YYYY HH:mm").valueOf() || moment(items.field[0], "MM/DD/YYYY HH:mm").valueOf()<= moment(endDateCov, "MM/DD/YYYY HH:mm").valueOf()
+                    return moment(items.field[0], "DD-MM-YY HH:mm").valueOf() >= moment(startDateCov, "DD-MM-YY HH:mm").valueOf() && moment(items.field[0], "DD-MM-YY HH:mm").valueOf()<= moment(endDateCov, "DD-MM-YY HH:mm").valueOf()
                 })
-
-                if(!timeFilter){
-                 return res.json({
-                        status: 0,
-                        message: "Object details is fetched Successfully.",
-                        data: {
-                            arrOfObj : []
-                        }
-                    });
-                }
+                console.log(timeFilter.length)
+                if(timeFilter.length != 0){
+                //  return res.json({
+                //         status: 0,
+                //         message: "Object details is fetched Successfully.",
+                //         data: {
+                //             arrOfObj : []
+                //         }
+                //     });
+                
             // console.log('here is the time' ,timeFilter)
             filtered_obj.map((item) => {
         
@@ -19315,14 +19317,16 @@ router.get('/detials', async function (req, res, next) {
                 }
                 objectCount = [...objectCount, obj]
             })
+        }
         })
+        if(timeFilter.length > 0){
         // return ;
         request({
             uri: 'https://fleetapi.geeksapi.app/api/statisticsByPeriod?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&timeBegin=1615006800&timeEnd=1615050000&objectType=0&aggregate=0',
         }, function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 body = JSON.parse(body);
-                var arrOfObj = [];
+                
                 Object.keys(body.statistics).map((item) => {
                     if (id_filter.indexOf(item) !== -1) {
                         body.statistics[item].id = item;
@@ -19355,7 +19359,7 @@ router.get('/detials', async function (req, res, next) {
                     })
 
                 })
-                res.json({
+              return  res.json({
                     status: 0,
                     message: "Object details is fetched Successfully.",
                     data: {
@@ -19366,6 +19370,15 @@ router.get('/detials', async function (req, res, next) {
                 res.json(error);
             }
         })
+    }else {
+        res.json({
+            status: 0,
+            message: "Object details is fetched Successfully.",
+            data: {
+                arrOfObj
+            }
+        });
+    }
     
     } catch (err) {
         console.log(err)

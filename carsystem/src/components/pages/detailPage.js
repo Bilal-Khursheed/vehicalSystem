@@ -7,9 +7,9 @@ class detailPage extends Component {
   state = {
     groupId: 0,
     groupName: "Choose a Group.",
-    startdate: "",
-    startdateFinal: "",
-    endDate: "",
+    startdate: "2021-05-10T01:32",
+    startdateFinal: "2021-05-10T01:32",
+    endDate: "2022-05-10T01:32",
   };
  
   render() {
