@@ -12,14 +12,7 @@ export class MapContainer extends Component {
     super(props);
 
     this.state = {
-      stores: [
-        // { lat: 47.49855629475769, lng: -122.14184416996333 },
-        // { latitude: 47.359423, longitude: -122.021071 },
-        // { latitude: 47.2052192687988, longitude: -121.988426208496 },
-        // { latitude: 47.6307081, longitude: -122.1434325 },
-        // { latitude: 47.3084488, longitude: -122.2140121 },
-        // { latitude: 47.5524695, longitude: -122.0425407 },
-      ],
+      stores: [],
       loading: true
     };
   }
@@ -38,19 +31,17 @@ export class MapContainer extends Component {
       `http://localhost:4000/api/map?assignType=${groupId}`
     );
 
-    console.log(data.data);
+    // console.log(data.data);
     data.data.data.map((item) => {
       var str = String(item.lastGPS).split(";");
       let obj = {
         latitude: parseFloat(str[0]),
-        longitude: parseFloat(str[1]), //latitude
-        name: item.address,
+        longitude: parseFloat(str[1]), 
+        name :item.objectName
       };
       return (valueArry = [...valueArry, obj]);
-
-      // console.log("data is ", String(item.lastGPS).split(";"))
     });
-    console.log(this.props.groupId, valueArry);
+    // console.log(this.props.groupId, valueArry);
     this.setState({
       stores: valueArry,
       loading: false
@@ -60,19 +51,17 @@ export class MapContainer extends Component {
     this.updateMap()
   }
   displayMarkers = () => {
-    console.log("hebflasibsf", this.state.stores);
     return this.state.stores.map((store, index) => {
       return (
         <Marker
           key={index}
           id={index}
-          title={store.name}
+          title={store.name }
           name={"SOMA"}
           position={{
             lat: store.latitude,
             lng: store.longitude,
           }}
-          //   onClick={() => console.log("You clicked me!")}
         />
       );
     });
@@ -89,7 +78,7 @@ export class MapContainer extends Component {
         <Map
           google={this.props.google}
           zoom={14}
-          style={mapStyles} //-19.8098866
+          style={mapStyles} 
           initialCenter={{ lat: -19.8098866, lng: 34.8344816 }}
         >
           {this.displayMarkers()}

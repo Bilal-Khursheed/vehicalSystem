@@ -7,7 +7,11 @@ class detailPage extends Component {
   state = {
     groupId: 0,
     groupName: "Choose a Group.",
+    startdate: "",
+    startdateFinal: "",
+    endDate: "",
   };
+ 
   render() {
     return (
       <div>
@@ -27,6 +31,7 @@ class detailPage extends Component {
           }}
         >
           <div class="btn-group mt-2 mr-1">
+          <label className='sr-only'>Select End Time</label><br></br>
             <input
               class="btn btn-secondary btn-lg"
               type="input"
@@ -47,8 +52,6 @@ class detailPage extends Component {
             <div
               class="dropdown-menu text-center"
               style={{
-                // backgroundColor: "#6c757d",
-                // color: "white",
                 padding: "0.3rem",
                 cursor: "pointer",
                 marginLeft: "0.2rem",
@@ -202,70 +205,48 @@ class detailPage extends Component {
               </option>
             </div>
           </div>
-          {/* <div class="btn-group mt-2 mr-1">
+          <div class="btn-group mt-2 mr-1">
+           <label className='text-center'>Select Start Time</label><br></br>
             <input
               class="btn btn-secondary btn-lg"
-              type="input"
-              value="Choose a group."
-              readOnly
+              type="datetime-local"
+              placeholder="Choose a group."
+              // readOnly
+              style={{ color: "white" }}
+              onChange={(e)=>{
+                this.setState({
+                  startdate : e.target.value
+                })
+              }}
+            />
+          
+          </div>
+         
+          <div class="btn-group mt-2 mr-1">
+           <label className='text-center'>Select End Time</label><br></br>
+            <input
+              class="btn btn-secondary btn-lg"
+              type="datetime-local"
+              placeholder="Choose a group."
+              // readOnly
+             onChange={(e)=>{
+               if(this.state.startdate === ""){
+                 alert("Please pick start date first")
+               }else{
+               this.setState({
+                 startdateFinal : this.state.startdate,
+                 endDate: e.target.value
+               })
+             }}
+            }
               style={{ color: "white" }}
             />
-
-            <button
-              type="button"
-              class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div
-              class="dropdown-menu text-center"
-              style={{
-                // backgroundColor: "#6c757d",
-                // color: "white",
-                padding: "0.3rem",
-                cursor: "pointer",
-                marginLeft: "0.2rem",
-                minWidth: "240px",
-                marginBottom: "5rem",
-              }}
-            >
-              <option style={{ fontSize: "18px", padding: "0.2rem" }}>
-                tsjdhvf
-              </option>
-              <hr
-                style={{
-                  width: "100%",
-                  height: "2px",
-                  color: "black",
-                  padding: "0px",
-                  marginTop: "3px",
-                  marginBottom: "3px",
-                }}
-              ></hr>
-              <option style={{ fontSize: "18px", padding: "0.2rem" }}>
-                tsjdhvf
-              </option>
-              <hr
-                style={{
-                  width: "100%",
-                  height: "2px",
-                  color: "black",
-                  padding: "0",
-                  marginTop: "3px",
-                  marginBottom: "3px",
-                }}
-              ></hr>
-              <option style={{ fontSize: "18px", padding: "0.2rem" }}>
-                tsjdhvf
-              </option>
-            </div>
-          </div> */}
+          
+          </div>
+         
         </div>
         <div>
-          <TableContect groupId={this.state.groupId} />
+          <TableContect groupId={this.state.groupId} startDate= {this.state.startdateFinal} endDate={this.state.endDate}/>
         </div>
       </div>
     );

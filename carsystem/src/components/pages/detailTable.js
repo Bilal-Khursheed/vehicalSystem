@@ -10,7 +10,7 @@ class tableContect extends Component {
     };
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.groupId !== this.props.groupId) {
+    if (prevProps.groupId !== this.props.groupId ||prevProps.startDate !== this.props.startDate ) {
       this.setState({
         loading: true,
       });
@@ -18,13 +18,11 @@ class tableContect extends Component {
     }
   }
   updateTable = async () => {
-    console.log("working.....");
     let groupId = this.props.groupId || 2;
-    let seconddata = await axios.get('https://sheetdb.io/api/v1/7i3xr5c1f4kma');
     let data = await axios.get(
-      `http://localhost:4000/api/detials?assignType=${groupId}`
+      `http://localhost:4000/api/detials?assignType=${groupId}&&startDate=${this.props.startDate}&&endDate=${this.props.endDate}`
     );
-    console.log(seconddata.data);
+    // console.log('here is the date' , this.props.startDate, this.props.endDate)
     this.setState({
       tableData: data.data.data.arrOfObj,
       loading: false,
@@ -41,33 +39,49 @@ class tableContect extends Component {
           spinner={true}
           text="Loading your content..."
         >
-          <div class="container mb-5">
+          <div class=" mb-5 ml-4 mr-4">
             <h2>Detial Table</h2>
             <p></p>
             <table class="table">
               <thead>
                 <tr>
                   <th>NO</th>
-                  <th>ID</th>
+                  <th>Object Name</th>
+                  <th>Delivery</th>
                   <th>Receival</th>
                   <th>Discharge</th>
                   <th>Load</th>
+                  <th>Rail Discharge</th>
+                  <th>Rail Load</th>
+                  <th>Yard Move</th>
+                  <th>Yard Shift</th>
+                  <th>Total Moves</th>
                   <th>Average Speed</th>
                   <th>Mileage (kms)</th>
                   <th>Fuel Consumption</th>
+                  <th>EngineIdlingTime</th>
+                  <th>engineOperationTime</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.tableData.map((item, index) => (
+                {this.state.tableData && this.state.tableData.map((item, index) => (
                   <tr>
                     <td>{index + 1}</td>
                     <td>{item.objectName}</td>
+                    <td>{item.Delivery}</td>
                     <td>{item.Receival}</td>
                     <td>{item.Discharge}</td>
                     <td>{item.Load}</td>
+                    <td>{item.railDischarge}</td>
+                    <td>{item.RailLoad}</td>
+                    <td>{item.yardMove}</td>
+                    <td>{item.yardShift}</td>
+                    <td>{item.totalMoves}</td>
                     <td>{item.speedAverage}</td>
                     <td>{item.mileage}</td>
                     <td>{item.fuelConsumptionDeviationPer100km}</td>
+                    <td>{item.engineIdlingTime}</td>
+                    <td>{item.engineOperationTime}</td>
                   </tr>
                 ))}
               </tbody>

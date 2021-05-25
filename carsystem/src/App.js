@@ -9,7 +9,6 @@ function App() {
       <Switch>
         <Route exact path="/" component={mainPage} />{" "}
         <Route path="/map" component={mapPage} />{" "}
-       
       </Switch>
     </Router>
   );

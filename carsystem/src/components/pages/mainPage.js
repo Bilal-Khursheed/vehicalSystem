@@ -3,7 +3,6 @@ import "./mainPage.css";
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
 import Navbar from './navbar'
-// import BounceLoader from 'react-spinners/BounceLoader'
 
 function MainPage() {
   const [unAssigned, setUnAssigned] = useState([]);
@@ -46,7 +45,6 @@ function MainPage() {
   }, []);
   return (
     <div>
-      {/* <button onClick={groupDetials()}> test</button> */}
       <Navbar/>
       {/* <!-- Modal --> */}
       <LoadingOverlay
@@ -54,7 +52,6 @@ function MainPage() {
         spinner={true}
         text="Loading your content..."
       >
-        {/* <p>Some content or children or something.</p> */}
         <div>
           <div
             class="modal fade"
