@@ -13,20 +13,21 @@ export class MapContainer extends Component {
 
     this.state = {
       stores: [],
-      loading: true
+      loading: true,
     };
   }
   componentDidUpdate(prevProps) {
     if (prevProps.groupId !== this.props.groupId) {
       this.setState({
-        loading: true
-      })
-      this.updateMap()
+        loading: true,
+      });
+      this.updateMap();
     }
   }
   updateMap = async () => {
     var groupId = this.props.groupId || 2,
       valueArry = [];
+    console.log("working.....");
     let data = await axios.get(
       `http://localhost:4000/api/map?assignType=${groupId}`
     );
@@ -36,27 +37,33 @@ export class MapContainer extends Component {
       var str = String(item.lastGPS).split(";");
       let obj = {
         latitude: parseFloat(str[0]),
-        longitude: parseFloat(str[1]), 
-        name :item.objectName
+        longitude: parseFloat(str[1]),
+        name: item.objectName,
       };
       return (valueArry = [...valueArry, obj]);
     });
     // console.log(this.props.groupId, valueArry);
     this.setState({
       stores: valueArry,
-      loading: false
+      loading: false,
     });
   };
   componentDidMount() {
-    this.updateMap()
+    this.timer = setInterval(() => {
+      this.updateMap();
+    }, 60000);
   }
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   displayMarkers = () => {
     return this.state.stores.map((store, index) => {
       return (
         <Marker
           key={index}
           id={index}
-          title={store.name }
+          title={store.name}
           name={"SOMA"}
           position={{
             lat: store.latitude,
@@ -71,19 +78,19 @@ export class MapContainer extends Component {
     return (
       <div style={{ margin: "0" }}>
         <LoadingOverlay
-        active={this.state.loading}
-        spinner={true}
-        text="Loading your map..."
-      >
-        <Map
-          google={this.props.google}
-          zoom={14}
-          style={mapStyles} 
-          initialCenter={{ lat: -19.8098866, lng: 34.8344816 }}
+          active={this.state.loading}
+          spinner={true}
+          text="Loading your map..."
         >
-          {this.displayMarkers()}
-        </Map>
-        <div className="" style={{ height: "390px" }}></div>
+          <Map
+            google={this.props.google}
+            zoom={14}
+            style={mapStyles}
+            initialCenter={{ lat: -19.8098866, lng: 34.8344816 }}
+          >
+            {this.displayMarkers()}
+          </Map>
+          <div className="" style={{ height: "390px" }}></div>
         </LoadingOverlay>
       </div>
     );
