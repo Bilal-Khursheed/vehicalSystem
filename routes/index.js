@@ -19321,6 +19321,7 @@ router.get('/detials', async function (req, res, next) {
         })
         if(timeFilter.length > 0){
         // return ;
+        console.log(id_filter)
         request({
             uri: 'https://fleetapi.geeksapi.app/api/statisticsByPeriod?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&timeBegin=1615006800&timeEnd=1615050000&objectType=0&aggregate=0',
         }, function (error, response, body) {
@@ -19330,6 +19331,8 @@ router.get('/detials', async function (req, res, next) {
                 Object.keys(body.statistics).map((item) => {
                     if (id_filter.indexOf(item) !== -1) {
                         body.statistics[item].id = item;
+                        body.statistics[item].engineIdlingTime = moment(item.engineIdlingTime).format('hh:mm');
+                        body.statistics[item].engineOperationTime = moment(item.engineOperationTime).format('hh:mm');
                         body.statistics[item].objectName = objectName[indexs + 1] || 0;
                         indexs++;
                         arrOfObj = [...arrOfObj,

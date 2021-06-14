@@ -79,7 +79,7 @@ class tableContect extends Component {
                     <td>{item.totalMoves}</td>
                     <td>{item.speedAverage}</td>
                     <td>{item.mileage}</td>
-                    <td>{item.fuelConsumptionDeviationPer100km}</td>
+                    <td>{item.fuelConsumptionActual}</td>
                     <td>{item.engineIdlingTime}</td>
                     <td>{item.engineOperationTime}</td>
                   </tr>
