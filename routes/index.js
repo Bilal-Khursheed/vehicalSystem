@@ -116,12 +116,12 @@ router.get('/detials', async function (req, res, next) {
     try {
         let assignType = req.query.assignType || null;
         let startDate = req.query.startDate || '2021-05-10T01:32';
-        let endDate = req.query.endDate|| '2022-05-10T01:32';
-        console.log('before conversion ' , startDate)
+        let endDate = req.query.endDate || '2022-05-10T01:32';
+        console.log('before conversion ', startDate)
         var startDateCov = moment(startDate).format("DD-MM-YY HH:mm");
         var endDateCov = moment(endDate).format("DD-MM-YY HH:mm ");
-        console.log('here is the time after conversion',startDateCov, endDateCov)
-        
+        console.log('here is the time after conversion', startDateCov, endDateCov)
+
         let id_filters = await objectModel.find({
             assignType: assignType
         }).select(['id', 'objectName']);
@@ -19234,19 +19234,19 @@ router.get('/detials', async function (req, res, next) {
             let count = 0,
                 receivalCount = [],
                 dischargeCount = [],
-               
+
                 loadCount = [];
 
             let rows = result['query-response']['data-table'][0]['rows'][0]
-           
-                timeFilter=   rows['row'].filter((items)=>{
-                   
-                    // return Date.parse(items.field[0]) >= Date.parse(startDateCov) && Date.parse(items.field[0]) <= Date.parse(endDateCov)
-                    // return new Date(items.field[0]) >= new Date(startDateCov) && new Date(items.field[0]) <= new Date(endDateCov)
-                    return moment(items.field[0], "DD-MM-YY HH:mm").valueOf() >= moment(startDateCov, "DD-MM-YY HH:mm").valueOf() && moment(items.field[0], "DD-MM-YY HH:mm").valueOf()<= moment(endDateCov, "DD-MM-YY HH:mm").valueOf()
-                })
-                console.log(timeFilter.length)
-                if(timeFilter.length != 0){
+
+            timeFilter = rows['row'].filter((items) => {
+
+                // return Date.parse(items.field[0]) >= Date.parse(startDateCov) && Date.parse(items.field[0]) <= Date.parse(endDateCov)
+                // return new Date(items.field[0]) >= new Date(startDateCov) && new Date(items.field[0]) <= new Date(endDateCov)
+                return moment(items.field[0], "DD-MM-YY HH:mm").valueOf() >= moment(startDateCov, "DD-MM-YY HH:mm").valueOf() && moment(items.field[0], "DD-MM-YY HH:mm").valueOf() <= moment(endDateCov, "DD-MM-YY HH:mm").valueOf()
+            })
+            console.log(timeFilter.length)
+            if (timeFilter.length != 0) {
                 //  return res.json({
                 //         status: 0,
                 //         message: "Object details is fetched Successfully.",
@@ -19254,135 +19254,140 @@ router.get('/detials', async function (req, res, next) {
                 //             arrOfObj : []
                 //         }
                 //     });
-                
-            // console.log('here is the time' ,timeFilter)
-            filtered_obj.map((item) => {
-        
-                if (item.startsWith(4)) {
-                    deliveryCount = timeFilter.filter((items) => {
-                        return items.field[5] == item && items.field[1] === 'Delivery'
-                    })
-                    receivalCount = timeFilter.filter((items) => {
-                        return items.field[7] == item && items.field[1] === 'Receival'
-                    })
-                    dischargeCount = timeFilter.filter((items) => {
-                        return items.field[7] == item && items.field[1] === 'Discharge'
-                    })
-                    loadCount = timeFilter.filter((items) => {
-                        return items.field[5] == item && items.field[1] === 'Load'
-                    })
-                    railDischargeCount = timeFilter.filter((items) => {
-                        return items.field[7] == item && items.field[1] === 'Rail Discharge'
-                    })
-                    railLoadCount = timeFilter.filter((items) => {
-                        return items.field[5] == item && items.field[1] === 'Rail Load'
-                    })
-                } else {
-                    receivalCount = timeFilter.filter((items) => {
-                        return items.field[9] == item && items.field[1] === 'Receival'
-                    })
-                    dischargeCount = timeFilter.filter((items) => {
-                        return items.field[9] == item && items.field[1] === 'Discharge'
-                    })
-                    loadCount = timeFilter.filter((items) => {
-                        return items.field[9] == item && items.field[1] === 'Load'
-                    })
-                    deliveryCount = timeFilter.filter((items) => {
-                        return items.field[9] == item && items.field[1] === 'Delivery'
-                    })
-                    railDischargeCount = timeFilter.filter((items) => {
-                        return items.field[9] == item && items.field[1] === 'Rail Discharge'
-                    })
-                    railLoadCount = timeFilter.filter((items) => {
-                        return items.field[9] == item && items.field[1] === 'Rail Load'
-                    })
-                }
-                yardMove = timeFilter.filter((items) => {
-                    return items.field[7] == item && items.field[1] === 'Yard Move'
-                })
-                yardShift = timeFilter.filter((items) => {
-                    return items.field[7] == item && items.field[1] === 'Yard Shift'
-                })
-                let obj = {
-                    name: item,
-                    receivalCount: receivalCount.length,
-                    dischargeCount: dischargeCount.length,
-                    deliveryCount: deliveryCount.length,
-                    railDischargeCount: railDischargeCount.length,
-                    railLoadCount: railLoadCount.length,
-                    loadCount: loadCount.length,
-                    yardMove: yardMove.length,
-                    yardShift: yardShift.length,
-                    totalMoves: (receivalCount.length + dischargeCount.length + deliveryCount.length + railDischargeCount.length + railLoadCount.length + loadCount.length + yardMove.length + yardShift.length)
-                }
-                objectCount = [...objectCount, obj]
-            })
-        }
-        })
-        if(timeFilter.length > 0){
-        // return ;
-        console.log(id_filter)
-        request({
-            uri: 'https://fleetapi.geeksapi.app/api/statisticsByPeriod?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&timeBegin=1615006800&timeEnd=1615050000&objectType=0&aggregate=0',
-        }, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                body = JSON.parse(body);
-                
-                Object.keys(body.statistics).map((item) => {
-                    if (id_filter.indexOf(item) !== -1) {
-                        body.statistics[item].id = item;
-                        body.statistics[item].engineIdlingTime = moment(item.engineIdlingTime).format('hh:mm');
-                        body.statistics[item].engineOperationTime = moment(item.engineOperationTime).format('hh:mm');
-                        body.statistics[item].objectName = objectName[indexs + 1] || 0;
-                        indexs++;
-                        arrOfObj = [...arrOfObj,
-                            body.statistics[item]
-                        ]
-                    }
-                });
-                arrOfObj.map((item) => {
-                    var res = item.objectName.split(" ");
-                    var ress = res[1].split("-")
-                    console.log(ress[0], ress[1])
-                    var resss = ress[0] ? ress[0] : ''
-                    var ressss = ress[1] ? ress[1] : ''
-                    var dataaa = resss + ressss
-                    objectCount.map((items) => {
-                        if (items.name == dataaa) {
-                            item.Delivery = items.deliveryCount
-                            item.Receival = items.receivalCount
-                            item.Discharge = items.dischargeCount
-                            item.Load = items.loadCount
-                            item.railDischarge = items.railDischargeCount || 0
-                            item.RailLoad = items.railLoadCount || 0
-                            item.yardMove = items.yardMove || 0
-                            item.yardShift = items.yardShift || 0
-                            item.totalMoves = items.totalMoves || 0
-                        }
-                    })
 
-                })
-              return  res.json({
-                    status: 0,
-                    message: "Object details is fetched Successfully.",
-                    data: {
-                        arrOfObj
+                // console.log('here is the time' ,timeFilter)
+                filtered_obj.map((item) => {
+
+                    if (item.startsWith(4)) {
+                        deliveryCount = timeFilter.filter((items) => {
+                            return items.field[5] == item && items.field[1] === 'Delivery'
+                        })
+                        receivalCount = timeFilter.filter((items) => {
+                            return items.field[7] == item && items.field[1] === 'Receival'
+                        })
+                        dischargeCount = timeFilter.filter((items) => {
+                            return items.field[7] == item && items.field[1] === 'Discharge'
+                        })
+                        loadCount = timeFilter.filter((items) => {
+                            return items.field[5] == item && items.field[1] === 'Load'
+                        })
+                        railDischargeCount = timeFilter.filter((items) => {
+                            return items.field[7] == item && items.field[1] === 'Rail Discharge'
+                        })
+                        railLoadCount = timeFilter.filter((items) => {
+                            return items.field[5] == item && items.field[1] === 'Rail Load'
+                        })
+                    } else {
+                        receivalCount = timeFilter.filter((items) => {
+                            return items.field[9] == item && items.field[1] === 'Receival'
+                        })
+                        dischargeCount = timeFilter.filter((items) => {
+                            return items.field[9] == item && items.field[1] === 'Discharge'
+                        })
+                        loadCount = timeFilter.filter((items) => {
+                            return items.field[9] == item && items.field[1] === 'Load'
+                        })
+                        deliveryCount = timeFilter.filter((items) => {
+                            return items.field[9] == item && items.field[1] === 'Delivery'
+                        })
+                        railDischargeCount = timeFilter.filter((items) => {
+                            return items.field[9] == item && items.field[1] === 'Rail Discharge'
+                        })
+                        railLoadCount = timeFilter.filter((items) => {
+                            return items.field[9] == item && items.field[1] === 'Rail Load'
+                        })
                     }
-                });
-            } else {
-                res.json(error);
+                    yardMove = timeFilter.filter((items) => {
+                        return items.field[7] == item && items.field[1] === 'Yard Move'
+                    })
+                    yardShift = timeFilter.filter((items) => {
+                        return items.field[7] == item && items.field[1] === 'Yard Shift'
+                    })
+                    let obj = {
+                        name: item,
+                        receivalCount: receivalCount.length,
+                        dischargeCount: dischargeCount.length,
+                        deliveryCount: deliveryCount.length,
+                        railDischargeCount: railDischargeCount.length,
+                        railLoadCount: railLoadCount.length,
+                        loadCount: loadCount.length,
+                        yardMove: yardMove.length,
+                        yardShift: yardShift.length,
+                        totalMoves: (receivalCount.length + dischargeCount.length + deliveryCount.length + railDischargeCount.length + railLoadCount.length + loadCount.length + yardMove.length + yardShift.length)
+                    }
+                    objectCount = [...objectCount, obj]
+                })
             }
         })
-    }else {
-        res.json({
-            status: 0,
-            message: "Object details is fetched Successfully.",
-            data: {
-                arrOfObj
-            }
-        });
-    }
-    
+        if (timeFilter.length > 0) {
+            // return ;
+            console.log(id_filter)
+            request({
+                uri: 'https://fleetapi.geeksapi.app/api/statisticsByPeriod?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&timeBegin=1615006800&timeEnd=1615050000&objectType=0&aggregate=0',
+            }, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    body = JSON.parse(body);
+
+                    Object.keys(body.statistics).map((item) => {
+                        if (id_filter.indexOf(item) !== -1) {
+                            body.statistics[item].id = item;
+                            console.log(item.engineIdlingTime, 'here is the sec', body.statistics[item].engineIdlingTime)
+                            var engineIdlingTime = moment.duration(parseInt(body.statistics[item].engineIdlingTime), 'seconds');
+                            body.statistics[item].engineIdlingTime = engineIdlingTime.hours() + ':' + engineIdlingTime.minutes();
+                            // moment.utc((item.engineIdlingTime)*1000).format('HH:mm:ss');
+                            // moment({}).seconds(item.engineIdlingTime).format('hh:mm');
+                            var engineOperationTime = moment.duration(parseInt(body.statistics[item].engineOperationTime), 'seconds');
+                            body.statistics[item].engineOperationTime = engineOperationTime.hours() + ':' + engineOperationTime.minutes();
+                            body.statistics[item].objectName = objectName[indexs + 1] || 0;
+                            indexs++;
+                            arrOfObj = [...arrOfObj,
+                                body.statistics[item]
+                            ]
+                        }
+                    });
+                    arrOfObj.map((item) => {
+                        var res = item.objectName.split(" ");
+                        var ress = res[1].split("-")
+                        console.log(ress[0], ress[1])
+                        var resss = ress[0] ? ress[0] : ''
+                        var ressss = ress[1] ? ress[1] : ''
+                        var dataaa = resss + ressss
+                        objectCount.map((items) => {
+                            if (items.name == dataaa) {
+                                item.Delivery = items.deliveryCount
+                                item.Receival = items.receivalCount
+                                item.Discharge = items.dischargeCount
+                                item.Load = items.loadCount
+                                item.railDischarge = items.railDischargeCount || 0
+                                item.RailLoad = items.railLoadCount || 0
+                                item.yardMove = items.yardMove || 0
+                                item.yardShift = items.yardShift || 0
+                                item.totalMoves = items.totalMoves || 0
+                            }
+                        })
+
+                    })
+                    return res.json({
+                        status: 0,
+                        message: "Object details is fetched Successfully.",
+                        data: {
+                            arrOfObj
+                        }
+                    });
+                } else {
+                    res.json(error);
+                }
+            })
+        } else {
+            res.json({
+                status: 0,
+                message: "Object details is fetched Successfully.",
+                data: {
+                    arrOfObj
+                }
+            });
+        }
+
     } catch (err) {
         console.log(err)
         res.json({
@@ -19408,7 +19413,7 @@ router.get('/map', async function (req, res, next) {
                     body = JSON.parse(body)
                     body.objectName = item.objectName
                     mapArry = [...mapArry, body]
-                   
+
                     if (count === id_filters.length) {
                         res.json({
                             status: 1,
