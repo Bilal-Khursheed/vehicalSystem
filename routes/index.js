@@ -19331,11 +19331,8 @@ router.get('/detials', async function (req, res, next) {
                     Object.keys(body.statistics).map((item) => {
                         if (id_filter.indexOf(item) !== -1) {
                             body.statistics[item].id = item;
-                            console.log(item.engineIdlingTime, 'here is the sec', body.statistics[item].engineIdlingTime)
                             var engineIdlingTime = moment.duration(parseInt(body.statistics[item].engineIdlingTime), 'seconds');
                             body.statistics[item].engineIdlingTime = engineIdlingTime.hours() + ':' + engineIdlingTime.minutes();
-                            // moment.utc((item.engineIdlingTime)*1000).format('HH:mm:ss');
-                            // moment({}).seconds(item.engineIdlingTime).format('hh:mm');
                             var engineOperationTime = moment.duration(parseInt(body.statistics[item].engineOperationTime), 'seconds');
                             body.statistics[item].engineOperationTime = engineOperationTime.hours() + ':' + engineOperationTime.minutes();
                             body.statistics[item].objectName = objectName[indexs + 1] || 0;

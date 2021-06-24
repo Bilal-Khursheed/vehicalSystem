@@ -22,15 +22,20 @@ class tableContect extends Component {
     let data = await axios.get(
       `http://localhost:4000/api/detials?assignType=${groupId}&&startDate=${this.props.startDate}&&endDate=${this.props.endDate}`
     );
-    // console.log('here is the date' , this.props.startDate, this.props.endDate)
     this.setState({
       tableData: data.data.data.arrOfObj,
       loading: false,
     });
   };
-  async componentDidMount() {
-    this.updateTable();
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.updateTable();
+    }, 60000);
   }
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   render() {
     return (
       <div>
