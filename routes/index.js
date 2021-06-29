@@ -89,14 +89,11 @@ router.put("/", async function (req, res, next) {
   try {
     let assignType = parseInt(req.query.assignType) || 0;
     let id = req.query.id || 0;
-    let unAssigned = await objectModel.findOneAndUpdate(
-      {
-        id: id,
-      },
-      {
-        assignType: assignType,
-      }
-    );
+    let unAssigned = await objectModel.findOneAndUpdate({
+      id: id,
+    }, {
+      assignType: assignType,
+    });
     console.log(unAssigned);
     if (unAssigned) {
       console.log("updated");
@@ -143,16 +140,12 @@ router.get("/detials", async function (req, res, next) {
     id_filters.map((item) => {
       objectName = [...objectName, item.objectName];
       id_filter = [...id_filter, `${item.id}`];
-      var res = item.objectName.split(" ");
-      var ress = res[1].split("-");
-      var resss = ress[0] ? ress[0] : "";
-      var ressss = ress[1] ? ress[1] : "";
-      var dataaa = resss + ressss;
+      let myArray = item.objectName.split(/(\d+)/).filter(Boolean)
+      var dataaa = myArray[1] + myArray[3]
       filtered_obj = [...filtered_obj, dataaa];
     });
     console.log("working till now");
-    request(
-      {
+    request({
         uri: "http://10.0.4.21:10080/apex/api/query?filtername=MH&operatorId=CDM&complexId=BEIRA&facilityId=BEIRA&yardId=BEIRA",
         headers: {
           Authorization: auth,
@@ -178,9 +171,9 @@ router.get("/detials", async function (req, res, next) {
               // return new Date(items.field[0]) >= new Date(startDateCov) && new Date(items.field[0]) <= new Date(endDateCov)
               return (
                 moment(items.field[0], "DD-MM-YY HH:mm").valueOf() >=
-                  moment(startDateCov, "DD-MM-YY HH:mm").valueOf() &&
+                moment(startDateCov, "DD-MM-YY HH:mm").valueOf() &&
                 moment(items.field[0], "DD-MM-YY HH:mm").valueOf() <=
-                  moment(endDateCov, "DD-MM-YY HH:mm").valueOf()
+                moment(endDateCov, "DD-MM-YY HH:mm").valueOf()
               );
             });
             console.log(timeFilter.length);
@@ -279,8 +272,7 @@ router.get("/detials", async function (req, res, next) {
                   loadCount: loadCount.length,
                   yardMove: yardMove.length,
                   yardShift: yardShift.length,
-                  totalMoves:
-                    receivalCount.length +
+                  totalMoves: receivalCount.length +
                     dischargeCount.length +
                     deliveryCount.length +
                     railDischargeCount.length +
@@ -296,8 +288,7 @@ router.get("/detials", async function (req, res, next) {
 
           if (timeFilter.length > 0) {
             // return ;
-            request(
-              {
+            request({
                 uri: "https://fleetapi.geeksapi.app/api/statisticsByPeriod?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&timeBegin=1615006800&timeEnd=1615050000&objectType=0&aggregate=0",
               },
               function (error, response, body) {
@@ -332,12 +323,8 @@ router.get("/detials", async function (req, res, next) {
                     }
                   });
                   arrOfObj.map((item) => {
-                    var res = item.objectName.split(" ");
-                    var ress = res[1].split("-");
-                    console.log(ress[0], ress[1]);
-                    var resss = ress[0] ? ress[0] : "";
-                    var ressss = ress[1] ? ress[1] : "";
-                    var dataaa = resss + ressss;
+                    let myArray = item.objectName.split(/(\d+)/).filter(Boolean)
+                    var dataaa = myArray[1] + myArray[3]
                     objectCount.map((items) => {
                       if (items.name == dataaa) {
                         item.Delivery = items.deliveryCount;
@@ -396,8 +383,7 @@ router.get("/map", async function (req, res, next) {
     let mapArry = [];
     let count = 1;
     id_filters.map((item, index) => {
-      request(
-        {
+      request({
           uri: `https://fleetapi.geeksapi.app/api/currentObjectState?api_token=01a7e2aa1e56ab03c56b7f2aa0580e5af63958fcdaa0a1e7e59ce14803f2&objectId=${item.id}`,
         },
         function (error, response, body) {
