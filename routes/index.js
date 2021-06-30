@@ -4,36 +4,7 @@ var objectModel = require("../models/objects");
 var request = require("request");
 var xml2js = require("xml2js");
 var moment = require("moment");
-/* save Object data. */
-router.post("/add", async function (req, res, next) {
-  try {
-    // const {
-    //   garageNumber,
-    //   id,
-    //   mnfID,
-    //   objectName,
-    //   objectType,
-    //   phone,
-    //   groupList
-    // } = req.body;
-    // console.log(req.body)
-    // return res.send(req.body)
-    await objectModel.insertMany(req.body);
 
-    return res.json({
-      status: 0,
-      message: "Object data is saved Successfully.",
-      data: [],
-    });
-  } catch (err) {
-    res.json({
-      status: 1,
-      message: "Internal Server Error",
-      data: [],
-    });
-  }
-});
-/* get Object data. */
 router.get("/get", async function (req, res, next) {
   try {
     let allData = await objectModel.find({}).lean();
@@ -152,10 +123,7 @@ router.get("/detials", async function (req, res, next) {
         },
       },
       function (error, response, body) {
-        // console.log(response);
         if (!error && response.statusCode === 200) {
-          //   console.log(body);
-
           let data = body;
           let parser = new xml2js.Parser();
           parser.parseString(data, function (err, result) {
@@ -167,8 +135,6 @@ router.get("/detials", async function (req, res, next) {
             let rows = result["query-response"]["data-table"][0]["rows"][0];
 
             timeFilter = rows["row"].filter((items) => {
-              // return Date.parse(items.field[0]) >= Date.parse(startDateCov) && Date.parse(items.field[0]) <= Date.parse(endDateCov)
-              // return new Date(items.field[0]) >= new Date(startDateCov) && new Date(items.field[0]) <= new Date(endDateCov)
               return (
                 moment(items.field[0], "DD-MM-YY HH:mm").valueOf() >=
                 moment(startDateCov, "DD-MM-YY HH:mm").valueOf() &&
@@ -181,15 +147,6 @@ router.get("/detials", async function (req, res, next) {
             console.log(timeFilter.length);
             console.log("*********************************************");
             if (timeFilter.length != 0) {
-              //  return res.json({
-              //         status: 0,
-              //         message: "Object details is fetched Successfully.",
-              //         data: {
-              //             arrOfObj : []
-              //         }
-              //     });
-
-              // console.log('here is the time' ,timeFilter)
               filtered_obj.map((item) => {
                 if (item.startsWith(4)) {
                   deliveryCount = timeFilter.filter((items) => {
@@ -298,8 +255,12 @@ router.get("/detials", async function (req, res, next) {
                   Object.keys(body.statistics).map((item) => {
                     if (id_filter.indexOf(item) !== -1) {
                       body.statistics[item].id = item;
-                      body.statistics[item].objectName =
-                        objectName[indexs + 1] || 0;
+                      id_filters.forEach(element => {
+                        if(element.id == item){
+                        body.statistics[item].objectName =element.objectName || '';
+                        }
+                      });
+                      
                       var engineIdlingTime = moment.duration(
                         parseInt(body.statistics[item].engineIdlingTime),
                         "seconds"
@@ -316,8 +277,8 @@ router.get("/detials", async function (req, res, next) {
                         engineOperationTime.hours() +
                         ":" +
                         engineOperationTime.minutes();
-                      body.statistics[item].objectName =
-                        objectName[indexs + 1] || 0;
+                      // body.statistics[item].objectName =
+                      //   objectName[indexs + 1] || 0;
                       indexs++;
                       arrOfObj = [...arrOfObj, body.statistics[item]];
                     }
